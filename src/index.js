@@ -23,7 +23,13 @@ app.get('/health', (_req, res) => res.json({ ok: true }));
 
 app.use('/api', apiRouter);
 
-const port = process.env.PORT || 4000;
-app.listen(port, () => {
-  console.log(`API listening on http://localhost:${port}`);
-});
+// Export the app for Vercel
+module.exports = app;
+
+// Only start the server if not in Vercel environment
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  const port = process.env.PORT || 4000;
+  app.listen(port, () => {
+    console.log(`API listening on http://localhost:${port}`);
+  });
+}
